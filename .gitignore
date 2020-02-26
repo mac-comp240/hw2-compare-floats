@@ -1,0 +1,9 @@
+# VS Code
+.vscode
+sftp.json
+# Atom
+.remote-sync.json
+.ftpconfig
+
+#executable
+check_mult_overflow
