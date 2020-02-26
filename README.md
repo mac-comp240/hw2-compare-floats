@@ -1,3 +1,7 @@
+# Relational Operations on Floating Point numbers
+
+Here you will look at how floating point numbers are actually compared by the machine by implementing it yourself.
+
 ## Important Details
 
 **Code files supplied:** `floatParts.c` and `test.c`  (you must complete)
