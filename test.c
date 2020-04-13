@@ -44,6 +44,7 @@ int main() {
 	assert(float_le(x,y) == 1);
 	assert(float_ge(x,y) == 1);
 
+// TODO: work on this loop below and others of your choice
 //////// A test that shows how the operator <= would get converted
 //////// into a macro function by the machine when used in a
 /////// relational expression (in a loop in this case).
@@ -52,9 +53,9 @@ int main() {
 	x = 5.0;
 	y = 10.0;
 	while (float_le(x,y)) {
-		printf("x: %f, ", x);  // can assert here
+		printf("x: %f, ", x);  // should change to assert here
 		x = x + 1.0;
 	}
-	printf("\n");
+	printf("\n");  // then also don't need this
 ///////
 }
