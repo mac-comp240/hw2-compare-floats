@@ -78,7 +78,7 @@ void uint_binary(unsigned int input, char* result) {
         } else {
 			strcat(result, "0");
 		}
-		if ((i % 4) == 0) {
+		if ((i % 4) == 0 && i != 0) {   //pretty print a space between 4 bits
       	 strcat(result, " ");
       	}
 	}
