@@ -2,15 +2,13 @@
 
 Here you will look at how floating point numbers are actually compared by the machine by implementing it yourself.
 
-## Important Details
+**Starter Code:** `floatParts.c` and `test.c` 
 
-**Code files supplied:** `floatParts.c` and `test.c`  (you must complete)
-
-**Name of executable program:** `fp_relational_ops`
+**Name of Executable:** `fp_relational_ops`
 
 You create the Makefile.
 
-We should be able to do these steps in your terminal:
+We should be able to run these commands for your code:
 
     make clean
     make
@@ -34,11 +32,11 @@ A useful property of floating point numbers is that we can treat the binary repr
 
 ## Goal of assignment
 
-You are given a file called `floatParts.c` that you must complete. There are TODO tags where you need to either describe what and existing function does or where you need to complete the function given a description and some starter code.
+You are given a file called `floatParts.c` that you must complete. There are TODO tags where you need to either describe what an existing function does or where you need to complete the function given a description and some starter code.
 
 You are also given a `test.c` file that contains some code to get you started. The asserts will fail until you get your functions working properly. The while loop shown as a test will not work correctly either until you have completed the functions.
 
-Your goal is to create sufficient tests to ensure that your code works with all valid float numbers. **Please be aware that it will take a fairly large number of test cases to ensure that your functions are correct.** Remember that there are two types of encodings for M and E that create the exp and frac portions of a single precision floating point number: denormalized (really small fractional numbers) and normalized numbers. There are "edge cases" for each of these: smallest and largest values. These numbers are positive and negative. Then there are the special cases that we talked about in class: infinity and NaN. In this case, you can assume that it is not possible to use relational operations when a float value is NaN, so you do not have to test that. Another aspect to consider is that your functions will be testing for equality as well as less than and greater than. If you think carefully about all of this, it adds up to a very large number of cases that you need to try.
+Your need to create sufficient tests to ensure that your code works with all valid float numbers. **Please be aware that it will take a fairly large number of test cases to ensure that your functions are correct.** Remember that there are two types of encodings for M and E that create the exp and frac portions of a single precision floating point number: denormalized (really small fractional numbers) and normalized numbers. There are "edge cases" for each of these: smallest and largest values. These numbers are positive and negative. Then there are the special cases that we talked about in class: infinity and NaN. In this case, you can assume that it is not possible to use relational operations when a float value is NaN, so you do not have to test that. Another aspect to consider is that your functions will be testing for equality as well as less than and greater than. If you think carefully about all of this, it adds up to a very large number of cases that you need to try.
 
 Keep the mantra of this kind of testing in mind: zero, 1, many, and the edges, in both positive and negative directions.
 
