@@ -50,8 +50,8 @@ Because there are so many test cases, **you must use asserts in your tests**. Th
 
 ### Grading Criteria
 
-1. compiles and runs, creating an executable named `fp_relational_ops`
-1. code follows the coding guidelines, including descriptions of the functions you write
-1. correctness
-1. only used bitwise and relational operators in your functions
-1. use of asserts in tests, including in loops that complete successfully
+1. compiles and runs, creating an executable named `fp_relational_ops`c  (about 2%)
+1. code follows the coding guidelines, including descriptions of the functions you write (about 11%)
+1. correctness  (about 36%)
+1. only used bitwise and relational operators in your functions  (about 5%)
+1. use of asserts in tests, including in loops that complete successfully (about 45%)
