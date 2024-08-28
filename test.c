@@ -1,61 +1,58 @@
-#include <stdio.h>
-#include <assert.h>
+/*
+ * TODO: add file description/authorship
+ */
 
-//declarations
-unsigned int convertDouble(double v);
-unsigned int convertFloat(float v);
+#include <stdio.h>   // for printf
+#include <assert.h>  // for assert
+// Add more #includes if you need them
+
+
+// declarations
+unsigned int convertDouble2Bits(double v);
+unsigned int convertFloat2Bits(float v);
 int float_le(float x, float y);
 int float_ge(float x, float y);
 void uint_binary(unsigned int input, char* result);
 
+
 int main() {
 	float x;
 	float y;
-
+    
 	//holds binary representation of each value for debugging
 	char bin[sizeof(unsigned int)*9 +1];
 
 	x = -4.5;
 	y = 5.0;
-
-	unsigned int ux = convertFloat(x);
-	unsigned int uy = convertFloat(y);
-
-	// debug to see if have correct representation
+	// --------------------------------------------------------
+    // check if results have the correct representation (for debugging)
+    // remove this once you are confident in how these work
+	unsigned int ux = convertFloat2Bits(x);
+	unsigned int uy = convertFloat2Bits(y);
 	uint_binary(ux, bin);
-	printf("%f has respresentation %x (%s)\n", x, ux, bin);
-
+	printf("%f has representation %x (%s)\n", x, ux, bin);
 	uint_binary(uy, bin);
-	printf("%f has respresentation %x (%s)\n", y, uy, bin);
-	////// end debug
-
+	printf("%f has representation %x (%s)\n", y, uy, bin);
+	// --------------------------------------------------------
 	assert(float_le(x,y) == 1);
 	assert(float_ge(x,y) == 0);
 
 	x = 5.0;
 	y = 5.0;
-	ux = convertFloat(x);
-	uy = convertFloat(y);
+	// --------------------------------------------------------
+    // check if results have the correct representation (for debugging)
+    // remove this once you are confident in how these work
+	ux = convertFloat2Bits(x);
+	uy = convertFloat2Bits(y);
 	uint_binary(ux, bin);
-	printf("%f has respresentation %x (%s)\n", x, ux, bin);
-
+	printf("%f has representation %x (%s)\n", x, ux, bin);
 	uint_binary(uy, bin);
-	printf("%f has respresentation %x (%s)\n", y, uy, bin);
+	printf("%f has representation %x (%s)\n", y, uy, bin);
+	// --------------------------------------------------------
 	assert(float_le(x,y) == 1);
 	assert(float_ge(x,y) == 1);
 
-// TODO: work on this loop below and others of your choice
-//////// A test that shows how the operator <= would get converted
-//////// into a macro function by the machine when used in a
-/////// relational expression (in a loop in this case).
-/////// The code you would normally write would be:
-//////    while (x <= y) { ... }
-	x = 5.0;
-	y = 10.0;
-	while (float_le(x,y)) {
-		printf("x: %f, ", x);  // should change to assert here
-		x = x + 1.0;
-	}
-	printf("\n");  // then also don't need this
-///////
+    // TODO: Add your test calls here
+
+    return 0;
 }

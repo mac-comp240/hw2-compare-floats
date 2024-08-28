@@ -1,12 +1,38 @@
-#include <limits.h>
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
+/*
+ * TODO: complete this comment
+ */
+
+#include <stdio.h>    // for printf
+#include <string.h>   // for string operations (strcpy)
+// Add more #includes if you need them
+
 
 /*
  * TODO: explain this function
  */
-unsigned long convertDouble(double v) {
+unsigned int convertFloat2Bits(float v) {
+  float * f = &v;
+  unsigned int * uintp = (unsigned int *) f;
+  unsigned int val = *uintp;
+  return val;
+}
+
+
+/*
+ * TODO: explain this function
+ */
+float convertBits2Float(unsigned int bitv) {
+  unsigned int *f = &bitv;
+  float *fp = (float *) f;
+  float val = *fp;
+  return val;
+}
+
+
+/*
+ * TODO: explain this function
+ */
+unsigned long convertDouble2Bits(double v) {
 
   double * d = &v;
   unsigned long * ulongp = (unsigned long *) d;
@@ -17,12 +43,13 @@ unsigned long convertDouble(double v) {
 /*
  * TODO: explain this function
  */
-unsigned int convertFloat(float v) {
-  float * f = &v;
-  unsigned int * uintp = (unsigned int *) f;
-  unsigned int val = *uintp;
+double convertBits2Double(unsigned long bitv) {
+  unsigned long *f = &bitv;
+  double *fp = (double *) f;
+  double val = *fp;
   return val;
 }
+
 
 /*
  * TODO: complete this function, given this description:
@@ -33,12 +60,13 @@ unsigned int convertFloat(float v) {
  *
  */
  int float_le(float x, float y) {
-	unsigned ux = convertFloat(x);
-	unsigned uy = convertFloat(y);
+	unsigned ux = convertFloat2Bits(x);
+	unsigned uy = convertFloat2Bits(y);
 	unsigned sx = ux >> 31;
 	unsigned sy = uy >> 31;
 	
-	return 0;  //////!!!! replace this with correct code
+    // TODO: replace the line below with your solution to this problem
+	return 0;
     	
 }
 
@@ -51,12 +79,13 @@ unsigned int convertFloat(float v) {
  *
  */
 int float_ge(float x, float y) {
-  unsigned ux = convertFloat(x);
-	unsigned uy = convertFloat(y);
+  unsigned ux = convertFloat2Bits(x);
+	unsigned uy = convertFloat2Bits(y);
 	unsigned sx = ux >> 31;
 	unsigned sy = uy >> 31;
 
-  return  0;  //////!!!! replace this with correct code
+   // TODO: replace the line below with your solution to this problem
+   return  0;
     
 }
 

@@ -1,57 +1,224 @@
 # Relational Operations on Floating Point numbers
 
-Here you will look at how floating point numbers are actually compared by the machine by implementing it yourself.
+## Overview
 
-**Starter Code:** `floatParts.c` and `test.c` 
+In the IEEE 754 floating point representation there are three parts, the sign, the 
+exponent, and the mantissa/significand (called n, e, and s, respectively in the book). One of the
+benefits of this representation is that the bit-level representations of n, e, and s
+can be used to compare two values and determine whether one is less than or equal to the 
+other.
 
-**Name of Executable:** `fp_relational_ops`
+When we code with floats or doubles, we shouldn't use them counters in loops or 
+compare two floats for equality (because the inherent limits on precision could cause
+bad results). But we often have code that might look like use inequalities to
+compare doubles or floats, as in this example:
+```
+double value, threshold;
 
-You create the Makefile.
+...
 
-We should be able to run these commands for your code:
+if (value >= threshold) {
+    // take action
+}
+```
 
-    make clean
-    make
-    ./fp_relational_ops
+To compare two floating point numbers, we will treat the binary representation of each of 
+float or double as unsigned integers. We can use bitwise and shift operations to 
+extract the sign bit from each number, as well as the exponent and significant/mantissa,
+and then we will test a *relatively short* set of cases
+using a combination of bitwise operations, shifting operations, and logical operators to test
+them. You can either combine the cases into one big boolean expression, or use
+if statements to check each case in turn (the first approach is elegant, but harder
+to debug, the second is easier to read and debug, but less elegant).
 
-## Background
+The hardware of the machine implements something like this process: this is how
+the comparisons can be done quickly
 
-One of the useful features of the IEEE 754 floating point representation is that the binary representation of the parts, *exp* and *frac*, which encode the values M and E described in the book and in class, is that the bit-level representation can be used to compare two values and determine which one is less than or equal to the other or conversely which one is greater than or equal to the other.
+**Key insight here:** There are actually not very many different cases, so you
+may be overthinking things if your code starts to get exceptionally long or exceptionally
+complicated!
 
-We shouldn't ever use floats or doubles as counters in for loops or when checking for equality, but we often have code that might look like this, where we are checking whether some value (perhaps read in or streaming in from some data source) meets some threshold that would cause us to take action:
+Your overall tasks are:
+- to implement a function, `float_le`, that checks if one `float` is less than or equal
+  to another by analyzing their bit representations
+- to implement a function, `float_ge`, that checks if one `float` is greater than 
+  or equal to another by analyzing their bit representations
+- to implement a main function that performs at least 30 separate tests of these two
+  functions, testing all combinations of different kinds of floats
 
-    double value, threshold;
+### Assignment Rubric
 
-    ...
+- Overall (4 pts):
+    - Correct Makefile, compiles and runs without errors
+    - All debugging outputs removed or commented out
+    - Clean code style
+    - File description and names in file
 
-    if (value >= threshold) {
-      // take action
-    }
+- In `float_parts.c` (26 pts):
+    - Complete, correct descriptive comments for: `convertFloat2Bits`, `convertBits2Float`,
+    `convertDouble2Bits`, `convertBits2Double`
+    - Correct implementation of `float_le`, based on the binary representation
+    and its components, and using bitwise, shifting, and logical operations
+    - Correct implementation of `float_ge`, based on the binary representation
+    and its components, and using bitwise, shifting, and logical operations
+  
+- In `test.c` (20 pts):
+    - At least 30 properly written test calls that cover the categories of 
+    floating-point numbers as described below
+    - Extra credit available for finding 21 or more distinct pairings to test
 
-A useful property of floating point numbers is that we can treat the binary representation of each of two float values or double values as unsigned integers, get the sign bit of each, and then use a combination of shift, and logical operators (!, ==, ||, &&) to test certain cases and to combine the cases into one expression to determine whether the values are either <= or >= each other. This is how the machine can do faster comparisons of these numbers- they do not have to be treated as actual mathematical numbers (nor can they).
+### Starter Code
 
-## Goal of assignment
-
-You are given a file called `floatParts.c` that you must complete. There are TODO tags where you need to either describe what an existing function does or where you need to complete the function given a description and some starter code.
-
-You are also given a `test.c` file that contains some code to get you started. The asserts will fail until you get your functions working properly. The while loop shown as a test will not work correctly either until you have completed the functions.
-
-Your need to create sufficient tests to ensure that your code works with all valid float numbers. **Please be aware that it will take a fairly large number of test cases to ensure that your functions are correct.** Remember that there are two types of encodings for M and E that create the exp and frac portions of a single precision floating point number: denormalized (really small fractional numbers) and normalized numbers. There are "edge cases" for each of these: smallest and largest values. These numbers are positive and negative. Then there are the special cases that we talked about in class: infinity and NaN. In this case, you can assume that it is not possible to use relational operations when a float value is NaN, so you do not have to test that. Another aspect to consider is that your functions will be testing for equality as well as less than and greater than. If you think carefully about all of this, it adds up to a very large number of cases that you need to try.
-
-Keep the mantra of this kind of testing in mind: zero, 1, many, and the edges, in both positive and negative directions.
-
-### Important
-
-If you want to try to obtain the limits of floats for testing, there is a library in C for floating point numbers called float.h that has values called FLOAT_MIN and FLOAT_MAX. This does not help you for finding values in both the denormalized and normalized ranges of numbers. You will in this case need to devise numbers that are close to the limits for the smallest and largest denormalized and normalized numbers. Please don't feel the need to get exactly the limit, but rather get numbers very close, but not beyond the limits. Don't forget negative numbers.
+- `floatParts.c` 
+    - This file contains functions to convert floating-point numbers to 
+    unsigned integers **with the same binary representation*. You will add
+    functions to check floating-point less-than and greater-than when given those
+    unsigned integers (so that we can work with the bits of the float representation).
+- `test.c`
+    - The main program, which will contain your detailed tests of the relative
+    comparison functions in `floatParts.c`.
 
 
+### Execution
 
-Because there are so many test cases, **you must use asserts in your tests**. The printf statements given to you in test.c are *solely for initial debugging purposes*. You will want to comment these out once you determine that your asserts are working in your tests.
+The graders should be able to do the following to build and run your code *without errors*:
+```
+make clean
+make
+./fp_relational_ops
+```
 
-### Grading Criteria
+## Tasks to Complete
 
-1. compiles and runs, creating an executable named `fp_relational_ops`c  (about 2%)
-1. code follows the coding guidelines, including descriptions of the functions you write (about 11%)
-1. correctness  (about 36%)
-1. only used bitwise and relational operators in your functions  (about 5%)
-1. use of asserts in tests, including in loops that complete successfully (about 45%)
+### Task 1: Create the Makefile for this project
+
+This time, we want you to create the Makefile for this project. You can model it
+on previous activities or homeworks. Here are the key points:
+- The executable created should be called `fp_relational_ops`
+- You must compile together both C files in this project
+- You must include a `clean` target that removes the executable and any other files
+  created by the compilation process
+
+
+### Task 2: Build your intuitions
+
+Before you start coding, take some time to build up intuitions about floating-point
+values of different sorts, and their binary representations.
+
+Go back through readings, videos, notes, and class activities to understand the different
+kinds of numbers (normalized, denormalized, zero, infinity, NaN). Look at the `math.h`
+and `float.h` libraries for some helpful constants, but you will need also to do
+some calculations or in-depth research for the bounds for denormalized. Notice that -1.0 and 1.0
+are interesting cut points where the exponent values shift from negative to positive.
+
+**You will not have to deal with NaN for this assignment, but you will have to handle correctly
+all other kinds.**
+
+Determine the boundaries: 
+- What does zero look like?
+- What does infinity (positive and negative) look like?
+- What is the smallest positive denormalized number, and what is the largest positive denormalized number
+- What is the smallest positive normalized number?
+- Similarly what are they for negative denormalized and normalized numbers
+
+Look at the binary representation for these numbers, and separate them into sign, exponent, and significand/mantissa.
+What patterns do you see in those three values when one float is smaller than the other?
+
+Examine the starting `main` function in `test.c`. This function demonstrates how
+to call the `convertFloat2Bits` function, and how to print the value as a float,
+in hexadecimal, and in binary. Use this to help with your intuitions. (You may
+temporarily comment out the assertions that test `float_le` and `float_ge`.)
+
+### Task 3: implement `float_le`
+
+You must complete the implementation of the `float_le` function. This function should take in two
+`float` integers, `x` and `y`. It should return 1 if `x` is less than or equal to `y`,
+and it should return 1 if `x` is greater than `y`.
+
+You may not use the built-in `<=` operator on `x` and `y`. Instead, the starter
+code for the function converts the float values to be unsigned integers, keeping the
+same bit-level representation. Use bitwise, shift, and logical operations to extract
+the sign bit, and perhaps exponent and significand parts. Then check boolean 
+expressions to test the different cases (either combined in one big boolean expression
+or written as a set of `if` statements). Return the correct result.
+
+**Note:** While you may not use `<=` on the original `float` numbers, you **may**
+use it to compare components of the floating-point representation, like sign, exponent,
+significand, etc.
+
+Your function must work correctly when given any combination of valid kinds of 
+floats **except `NaN`**. It must also work with values that are strictly less than
+and values that are equal.
+
+
+#### Test as you go!
+
+Examine the `main` function in `test.c`. It includes two pairs of float values and shows
+how to check their representations in binary and how to test `float_le` and `float_ge`. 
+
+A major part of your task is to develop and implement thorough testing for these
+functions. As you implement each step in the `float_le` function, write tests that
+check it!
+
+Read the "Plan out testing" section below for more details.
+
+### Task 4: implement `float_ge`
+
+The `float_ge` function will naturally be similar to the `float_le` one. Implement 
+it in much the same way as the `float_le` function.
+
+### Planning out testing
+
+When planning cases to test your functions, think first about the structure of the
+data coming into the functions (what kind of floating-point numbers they are), and
+second about the structure of your code (making sure that every part of the code
+gets tested). 
+
+There are many different kinds of floating-point numbers you should test:
+* positive normalized numbers
+* positive denormalized numbers
+* negative normalized numbers
+* negative denormalized numbers
+* zero, both +0 and -0
+* infinity, both +infinity and -infinity (note the `math.h` library is useful here)
+* +1, -1
+    - Why is this a special case? Because 1.0 and -1.0 are at the edges between 
+    numbers with negative exponents and numbers with positive exponents!
+
+A good mantra for this kind of testing: zero, 1, many, and the edges, in both positive and negative directions.
+
+**How many tests should you have?** Each call to `float_le` or `float_ge` takes
+in two numbers. Given two numbers that are equal, we can usefully make two test calls
+(one each to `float_le` and `float_ge`). Given two numbers that are not equal,
+we can usefully make four calls (both orderings of the numbers to both `float_le` and `float_ge`). Given
+the categories above, it isn't hard to come up with 16-22 pairings you would want to test,
+which leads you to 60-80 actual test calls.
+
+Steps in planning tests:
+* Write out a listing of the pairings you think you should test. 
+* Determine simple numbers that fit the requirements of each pairing 
+    - You don't need to compare values that are extremely close together, except
+    for values that are equal
+    - To double-check yourself, you may construct a binary representation, assign
+    it to an unsigned int using hex notation, and then use the `convertBits2Float`
+    function to turn it back into a normal float
+* As you implement parts of `float_le` or `float_ge` that relate to a given pairing,
+  add the test case to your `main` function
+
+
+We are fairly generous. You will get full credit if you have at least 30 test calls,
+and they cover the categories listed above, at least partially. You will get
+extra credit for covering more than 20 pairings, each distinct.
+
+#### Correctly formatted tests
+
+Your tests should include:
+* a comment describing what is being tested
+* assert statements that call `float_le` or `float_ge` and check the result against the correct answer
+
+Do not include print statements. You may add them for debugging, but comment them out
+or remove them in the final code.
+
+**Your executable should, in its final form, produce no output.**
+
+
