@@ -133,7 +133,7 @@ temporarily comment out the assertions that test `float_le` and `float_ge`.)
 
 You must complete the implementation of the `float_le` function. This function should take in two
 `float` integers, `x` and `y`. It should return 1 if `x` is less than or equal to `y`,
-and it should return 1 if `x` is greater than `y`.
+and it should return 0 if `x` is greater than `y`.
 
 You may not use the built-in `<=` operator on `x` and `y`. Instead, the starter
 code for the function converts the float values to be unsigned integers, keeping the
