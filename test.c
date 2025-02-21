@@ -8,7 +8,7 @@
 
 
 // declarations
-unsigned int convertDouble2Bits(double v);
+unsigned long convertDouble2Bits(double v);
 unsigned int convertFloat2Bits(float v);
 int float_le(float x, float y);
 int float_ge(float x, float y);
