@@ -9,9 +9,10 @@ can be used to compare two values and determine whether one is less than or equa
 other.
 
 When we code with floats or doubles, we shouldn't use them counters in loops or 
-compare two floats for equality (because the inherent limits on precision could cause
-bad results). But we often have code that might look like use inequalities to
-compare doubles or floats, as in this example:
+compare two floats for equality, because the inherent limits on precision could cause
+bad results. Instead, we often compares two floats or doubles using inequality operators (less-than, greater-than, etc.), as shown
+in this example:
+
 ```
 double value, threshold;
 
@@ -23,20 +24,21 @@ if (value >= threshold) {
 ```
 
 To compare two floating point numbers, we will treat the binary representation of each of 
-float or double as unsigned integers. We can use bitwise and shift operations to 
-extract the sign bit from each number, as well as the exponent and significant/mantissa,
+float or double as unsigned binary sequences (represented as integers). We can use bitwise 
+and shift operations to 
+extract the sign bit from each number, as well as the exponent and significand/mantissa,
 and then we will test a *relatively short* set of cases
-using a combination of bitwise operations, shifting operations, and logical operators to test
+using a combination of comparison and logical operators to test
 them. You can either combine the cases into one big boolean expression, or use
 if statements to check each case in turn (the first approach is elegant, but harder
 to debug, the second is easier to read and debug, but less elegant).
 
 The hardware of the machine implements something like this process: this is how
-the comparisons can be done quickly
+the comparisons can be done quickly.
 
 **Key insight here:** There are actually not very many different cases, so you
 may be overthinking things if your code starts to get exceptionally long or exceptionally
-complicated!
+complicated! 
 
 Your overall tasks are:
 - to implement a function, `float_le`, that checks if one `float` is less than or equal
@@ -108,13 +110,14 @@ values of different sorts, and their binary representations.
 Go back through readings, videos, notes, and class activities to understand the different
 kinds of numbers (normalized, denormalized, zero, infinity, NaN). Look at the `math.h`
 and `float.h` libraries for some helpful constants, but you will need also to do
-some calculations or in-depth research for the bounds for denormalized. Notice that -1.0 and 1.0
+some calculations or in-depth research for the bounds for denormalized numbers. Notice that -1.0 and 1.0
 are interesting cut points where the exponent values shift from negative to positive.
 
 **You will not have to deal with NaN for this assignment, but you will have to handle correctly
 all other kinds.**
 
 Determine the boundaries: 
+
 - What does zero look like?
 - What does infinity (positive and negative) look like?
 - What is the smallest positive denormalized number, and what is the largest positive denormalized number
@@ -123,6 +126,12 @@ Determine the boundaries:
 
 Look at the binary representation for these numbers, and separate them into sign, exponent, and significand/mantissa.
 What patterns do you see in those three values when one float is smaller than the other?
+
+- What if one or both of `x` and `y` are zero?
+- What if both numbers are positive, of any type?
+- What if both numbers are negative, of any type?
+- What if one is positive and one negative, of any type?
+- What if one or both are positive infinity, or negative infinity?
 
 Examine the starting `main` function in `test.c`. This function demonstrates how
 to call the `convertFloat2Bits` function, and how to print the value as a float,
@@ -135,7 +144,9 @@ You must complete the implementation of the `float_le` function. This function s
 `float` integers, `x` and `y`. It should return 1 if `x` is less than or equal to `y`,
 and it should return 0 if `x` is greater than `y`.
 
-You may not use the built-in `<=` operator on `x` and `y`. Instead, the starter
+**You may not just compare `x` and `y` with the built-in `<=` operator. That defeats the purpose!**
+ 
+The starter
 code for the function converts the float values to be unsigned integers, keeping the
 same bit-level representation. Use bitwise, shift, and logical operations to extract
 the sign bit, and perhaps exponent and significand parts. Then check boolean 
@@ -160,7 +171,7 @@ A major part of your task is to develop and implement thorough testing for these
 functions. As you implement each step in the `float_le` function, write tests that
 check it!
 
-Read the "Plan out testing" section below for more details.
+Read the "Planning out testing" section below for more details.
 
 ### Task 4: implement `float_ge`
 
@@ -187,12 +198,27 @@ There are many different kinds of floating-point numbers you should test:
 
 A good mantra for this kind of testing: zero, 1, many, and the edges, in both positive and negative directions.
 
-**How many tests should you have?** Each call to `float_le` or `float_ge` takes
-in two numbers. Given two numbers that are equal, we can usefully make two test calls
-(one each to `float_le` and `float_ge`). Given two numbers that are not equal,
-we can usefully make four calls (both orderings of the numbers to both `float_le` and `float_ge`). Given
-the categories above, it isn't hard to come up with 16-22 pairings you would want to test,
-which leads you to 60-80 actual test calls.
+For testing, you want to choose pairs of numbers that test **within** and **between** each of the categories above, 
+being careful to test both equal and unequal values. It isn't hard to come up with at least 16-22 pairings to test.
+
+
+**How many tests should you have?** For each pair of numbers you identify, you can (and should) make multiple calls
+to `float_le` and `float_ge`. 
+
+* If the two inputs are equal, we can usefully make two test calls, for example:
+   * `float_le(5.0, 5.0)`
+   * `float_ge(5.0, 5.0)`
+* If the two inputs are not equal, we can usefully make four calls, for example:
+   * `float_le(4.0, 5.0)`
+   * `float_le(5.0, 4.0)`
+   * `float_ge(4.0, 5.0)`
+   * `float_ge(5.0, 4.0)`
+  
+Combining this with the number of pairings described above, and you can easily develop 60-80 calls. 
+We are asking you for only 30 (though you may do more), but we do expect that those 30 will cover the most important
+categories and combinations. You will get
+extra credit for covering more than 20 pairings, each distinct.
+
 
 Steps in planning tests:
 * Write out a listing of the pairings you think you should test. 
@@ -206,15 +232,11 @@ Steps in planning tests:
   add the test case to your `main` function
 
 
-We are fairly generous. You will get full credit if you have at least 30 test calls,
-and they cover the categories listed above, at least partially. You will get
-extra credit for covering more than 20 pairings, each distinct.
-
 #### Correctly formatted tests
 
 Your tests should include:
 * a comment describing what is being tested
-* assert statements that call `float_le` or `float_ge` and check the result against the correct answer
+* `assert` statements that call `float_le` or `float_ge` and check the result against the correct answer
 
 Do not include print statements. You may add them for debugging, but comment them out
 or remove them in the final code.
